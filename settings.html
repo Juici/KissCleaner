@@ -3,201 +3,80 @@
   <head>
     <meta charset="UTF-8">
     <title>KissCleaner Settings</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <center>
       <h1>This is a non functional representation of the settings menu.</h1>
     </center>
     <div id="kisscleaner-settings-container">
-      <div id="kisscleaner-settings">
+      <form id="kisscleaner-settings" name="kisscleaner-settings">
         <center><h3>KissCleaner Settings</h3></center>
-        <form>
-          <section>
+        <section>
+          <p>
+            <label for="setting-autoPause">
+              <input id="setting-autoPause" type="checkbox" name="autoPause">
+              <span>Stop video from playing automatically</span>
+            </label>
+          </p>
+          <p>
+            <label for="setting-autoPlay">
+              <input id="setting-autoPlay" type="checkbox" name="autoAdvance">
+              <span>Automatically play next video when video ends</span>
+            </label>
+          </p>
+          <p>
+            <label for="setting-autoScroll">
+              <input id="setting-autoScroll" type="checkbox" name="autoScroll">
+              <span>Automatically scroll down to video area</span>
+            </label>
+          </p>
+          <p>
+            <label for="setting-removeLogin">
+              <input id="setting-removeLogin" type="checkbox" name="removeLogin">
+              <span>Remove login</span>
+            </label>
+          </p>
+          <p>
+            <label for="setting-removeComments">
+              <input id="setting-removeComments" type="checkbox" name="removeComments">
+              <span>Remove comments</span>
+            </label>
+          </p>
+        </section>
+        <section>
+          <fieldset>
+            <legend><b>Player Options</b></legend>
             <p>
-              <label for="pause_option_box">
-                <input id="pause_option_box" type="checkbox" name="pause">
-                <span>Stop video from playing automatically</span>
+              <label for="setting-player">
+                <select id="setting-player" class="form-control" name="player">
+                  <option value="flash">Flash</option>
+                  <option value="html5" selected>HTML5</option>
+                </select>
+                <span>Player</span>
               </label>
             </p>
             <p>
-              <label for="autoplay_option_box">
-                <input id="autoplay_option_box" type="checkbox" name="autoplay">
-                <span>Automatically play next video when video ends</span>
+              <label for="setting-quality">
+                <select id="setting-quality" class="form-control" name="quality">
+                  <option value="360">360p</option>
+                  <option value="480">480p</option>
+                  <option value="720">720p</option>
+                  <option value="1080" selected>1080p</option>
+                </select>
+                <span>Quality</span>
               </label>
             </p>
             <p>
-              <label for="autoscroll_option_box">
-                <input id="autoscroll_option_box" type="checkbox" name="autoscroll">
-                <span>Automatically scroll down to video area</span>
+              <label for="setting-volume">
+                <input id="setting-volume" class="form-control" type="text" name="volume" placeholder="100" value="100" size="3" minlength="1" maxlength="3" pattern="(?:[0-9]{1,2}|100)" inputmode="numeric">
+                <span>Volume</span>
               </label>
             </p>
-            <p>
-              <label for="resize_option_box">
-                <input id="resize_option_box" type="checkbox" name="resize">
-                <span>Resize video area</span>
-              </label>
-            </p>
-            <p>
-              <label for="playback_speed_control_box">
-                <input id="playback_speed_control_box" type="checkbox" name="speed_playback">
-                <span>Enable HTML5 playback speed controls</span>
-              </label>
-            </p>
-            <p>
-              <label for="remove_login_box">
-                <input id="remove_login_box" type="checkbox" name="remove_login">
-                <span>Disable login</span>
-              </label>
-            </p>
-            <p>
-              <label for="remove_comments_box">
-                <input id="remove_comments_box" type="checkbox" name="remove_comments">
-                <span>Disable comments</span>
-              </label>
-            </p>
-          </section>
-          <section id="player_options">
-            <fieldset>
-              <legend><b>Player Options</b></legend>
-              <table>
-                <td>
-                  <label for="flash_option">
-                    <input id="flash_option" type="radio" name="player" value="flash">
-                    <span>Flash Player</span>
-                  </label>
-                </td>
-                <td>
-                  <label for="html5_option">
-                    <input id="html5_option" type="radio" name="player" value="html5">
-                    <span>HTML5 Player</span>
-                  </label>
-                </td>
-              </table>
-              <p>
-                <label for="quality_select">
-                  <select id="quality_select" class="form-control">
-                    <option value="360">360p</option>
-                    <option value="480">480p</option>
-                    <option value="720">720p</option>
-                    <option value="1080" selected>1080p</option>
-                  </select>
-                  <span>Quality</span>
-                </label>
-              </p>
-              <p>
-                <label for="volume_percent">
-                  <input id="volume_percent" class="form-control" type="text" name="volumepercent" placeholder="100" size="3" minlength="1" maxlength="3" pattern="(?:[0-9]{1,2}|100)" inputmode="numeric">
-                  <span>Volume</span>
-                </label>
-              </p>
-            </fieldset>
-          </section>
-          <center><input id="menu_sumbit_button" type="button" value="Save"></center>
-        </form>
-      </div>
-      <style type="text/css">
-        #kisscleaner-settings-container {
-          position: fixed;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 10000;
-          background-color: rgba(0, 0, 0, 0.4);
-        }
-        #kisscleaner-settings {
-          background-color: #fff;
-          border: 1px solid rgba(0, 0, 0, .4);
-          border-radius: 15px;
-          padding: 30px;
-          color: #333;
-          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          font-size: 14px;
-          filter: drop-shadow(0 0 20px rgba(0, 0, 0, .4));
-        }
-
-        #kisscleaner-settings h3,
-        #kisscleaner-settings section {
-          margin: 15px 0;
-        }
-        #kisscleaner-settings p {
-          margin: 10px 0;
-        }
-        #kisscleaner-settings label {
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
-          align-items: center;
-        }
-        #kisscleaner-settings label input,
-        #kisscleaner-settings label select {
-          margin: 0 10px 0 0;
-          font-family: inherit;
-        }
-
-        .form-control {
-          display: inline-block;
-          height: 28px;
-          padding: 0;
-          color: #555;
-          background-color: #fff;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-          font-size: 12px;
-          text-indent: 0;
-          text-align: left;
-          vertical-align: middle;
-          box-sizing: border-box;
-          outline: 0;
-        }
-        .form-control:focus {
-          border-color: #66afe9;
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #66afe999;
-        }
-        .form-control:invalid {
-          border-color: #e9666e;
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #e9666e99;
-        }
-
-        #player_options table {
-          width: 100%;
-        }
-        #volume_percent, #quality_select {
-          width: 70px;
-          text-align: center;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-        }
-
-        #menu_sumbit_button {
-          color: #fff;
-          background-color: #337ab7;
-          border: 1px solid #2e6da4;
-          border-radius: 4px;
-          display: inline-block;
-          padding: 6px 12px;
-          margin: 15px 0;
-          font-family: inherit;
-          font-size: 14px;
-          font-weight: 400;
-          text-align: center;
-          cursor: pointer;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-        #menu_sumbit_button:active,
-        #menu_sumbit_button:hover {
-          background-color: #286090;
-          border-color: #204d74;
-        }
-      </style>
+          </fieldset>
+        </section>
+        <center><input id="kisscleaner-settings-save" type="button" value="Save"></center>
+      </form>
     </div>
   </body>
 </html>
