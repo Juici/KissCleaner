@@ -1,0 +1,55 @@
+:root {
+  --video-width: 960px;
+  --video-height: calc(0.5625 * var(--video-width));
+  --video-padding: 10px;
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --video-width: 1120px;
+  }
+}
+@media screen and (min-width: 1400px) {
+  :root {
+    --video-width: 1280px;
+  }
+}
+
+#container,
+#adsIfrme,
+.barContent,
+.barContent > div,
+#centerDivVideo,
+#divContentVideo {
+  height: auto !important;
+  width: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-sizing: border-box !important;
+  background-image: none !important;
+}
+
+#container {
+  width: calc(var(--video-width) + 2 * var(--video-padding)) !important;
+  transition: height ease-in-out 0.5s,
+              width ease-in-out 0.5s;
+  margin: 10px auto !important;
+  border: 1px solid #2f2f2f !important;
+}
+
+#adsIfrme {
+  padding: var(--video-padding) !important;
+}
+
+#my_video_1 {
+  height: var(--video-height) !important;
+  width: var(--video-width) !important;
+  transition: height ease-in-out 0.5s,
+              width ease-in-out 0.5s;
+  outline: 0 !important;
+}
+
+.barContent > div > div:first-of-type {
+  padding: 0 !important;
+}
