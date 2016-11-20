@@ -32,8 +32,6 @@
 
 #container {
   width: calc(var(--video-width) + 2 * var(--video-padding)) !important;
-  transition: height ease-in-out 0.5s,
-              width ease-in-out 0.5s;
   margin: 10px auto !important;
   border: 1px solid #2f2f2f !important;
 }
@@ -45,8 +43,6 @@
 #my_video_1 {
   height: var(--video-height) !important;
   width: var(--video-width) !important;
-  transition: height ease-in-out 0.5s,
-              width ease-in-out 0.5s;
   outline: 0 !important;
 }
 
