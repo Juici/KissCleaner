@@ -9,7 +9,7 @@
 // @include     http://kisscartoon.me/*
 // @include     https://kissasian.com/*
 // @include     http://kissasian.com/*
-// @version     4.0
+// @version     1.0
 // @downloadURL https://juici.github.io/KissCleaner/kisscleaner.user.js
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -24,7 +24,7 @@
 // ==/UserScript==
 
 // current page url
-let url = window.location.href;
+const url = window.location.href;
 // regex to check against for determining what type page currently on and what to clean
 const rHome = /https?:\/\/(kiss(?:anime\.to|cartoon\.me|asian\.com))\/$/;
 const rAnimeList = /https?:\/\/(kiss(?:anime\.to|cartoon\.me|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
@@ -90,7 +90,7 @@ const _ = {
   },
   // remove element matching css selector (first or index)
   removeAd: function (selector, index) {
-    let ads = _.queryAll(selector);
+    const ads = _.queryAll(selector);
 
     // make sure index is within bounds
     index = index || 0;
@@ -102,21 +102,21 @@ const _ = {
   },
   // remove all elements matching css selectors
   removeAds: function (...selectors) {
-    let ads = _.queryAll(selectors);
+    const ads = _.queryAll(selectors);
     ads.forEach(elt => elt.remove());
   },
   // clean up the empty space left by ad removal
   cleanupAdspace: function () {
     // get the ads frame
-    let adspace = document.getElementById('adsIfrme1');
+    const adspace = document.getElementById('adsIfrme1');
     if (adspace) {
       // check and remove the clear before the adspace
-      let clearBefore = adspace.parentElement.previousElementSibling;
+      const clearBefore = adspace.parentElement.previousElementSibling;
       if (clearBefore && clearBefore.matches('.clear')) {
         clearBefore.remove();
       }
       // check and remove the clear a bit after the adspace
-      let clearAfter = adspace.parentElement.nextElementSibling && adspace.parentElement.nextElementSibling.nextElementSibling &&
+      const clearAfter = adspace.parentElement.nextElementSibling && adspace.parentElement.nextElementSibling.nextElementSibling &&
         adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling ? adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling : null;
       if (clearAfter && clearAfter.matches('.clear')) {
         clearAfter.remove();
@@ -128,24 +128,20 @@ const _ = {
   // remove or hide stubborn ads
   hideAds: function () {
     let count = 0;
-    let adremover = setInterval(() => {
+    const adremover = setInterval(() => {
       count++;
 
       // remove extra elements after #containerRoot in body
-      let body = document.body;
-      for (let i = body.children.length - 1; !body.children[i].matches('#containerRoot'); i--) {
-        body.children[i].remove();
-      }
+      const rootAds = _.queryAll('#containerRoot ~ *');
+      rootAds.forEach(elt => elt.remove());
 
       // hide elements after #container in #containerRoot
-      let container = document.getElementById('containerRoot');
-      for (let i = container.children.length - 1; !container.children[i].matches('#container'); i--) {
-        _.hideElement(container.children[i], true);
-      }
+      const containerAds = _.queryAll('#container ~ *');
+      containerAds.forEach(elt => _.hideElement(elt, true));
 
       // hide elements in the #rightside that aren't content
-      let rightsideDivs = _.queryAll('#rightside > div:not(.rightBox):not(.clear):not(.clear2)');
-      rightsideDivs.forEach(elt => _.hideElement(elt, true));
+      const rightsideAds = _.queryAll('#rightside > div:not(.rightBox):not(.clear):not(.clear2)');
+      rightsideAds.forEach(elt => _.hideElement(elt, true));
 
       if (count === 50) {
         clearInterval(adremover);
@@ -155,7 +151,7 @@ const _ = {
   // inject javascript into page
   injectScript: function (js) {
     // create script to inject
-    let script = document.createElement('script');
+    const script = document.createElement('script');
     script.type = 'text/javascript';
     script.innerHTML = (typeof js === 'function' ? `(${js.toString()})();` : js);
     // inject the script
@@ -173,14 +169,14 @@ const _ = {
   },
   // navigate to previous video
   previousVideo: function () {
-    let btnPrevious = document.getElementById('btnPrevious');
+    const btnPrevious = document.getElementById('btnPrevious');
     if (btnPrevious) {
       window.location.href = btnPrevious.parentElement.href;
     }
   },
   // navigate to next video
   nextVideo: function () {
-    let btnNext = document.getElementById('btnNext');
+    const btnNext = document.getElementById('btnNext');
     if (btnNext) {
       window.location.href = btnNext.parentElement.href;
     }
@@ -203,11 +199,11 @@ if (rHome.test(url)) {
   console.log('Cleaning home page...');
 
   // remove sections from the right side of the page
-  let rightsideSearch = [/remove ads/i, /like me please/i];
-  let rightside = document.getElementById('rightside');
+  const rightsideSearch = [/remove ads/i, /like me please/i];
+  const rightside = document.getElementById('rightside');
   if (rightside) {
     for (let i = rightside.children.length - 1; i >= 0; i--) {
-      let child = rightside.children[i];
+      const child = rightside.children[i];
       // if child has children
       if (child.children.length > 0) {
         // check search patterns
@@ -221,7 +217,7 @@ if (rHome.test(url)) {
 
         // remove because a pattern matched and remove following .clear2 (if exists)
         if (remove) {
-          let clear2 = child.nextElementSibling;
+          const clear2 = child.nextElementSibling;
           if (clear2 && clear2.matches('.clear2')) {
             clear2.remove();
           }
@@ -232,7 +228,7 @@ if (rHome.test(url)) {
   }
 
   // remove register link in nav sub bar
-  let navsub = document.querySelector('#navsubbar > p');
+  const navsub = document.querySelector('#navsubbar > p');
   if (navsub) {
     navsub.children[0].remove();
     navsub.childNodes[1].remove();
@@ -279,14 +275,14 @@ if (rAnimePage.test(url)) {
   _.removeAds('#divFloatLeft', '#divFloatRight', '#divAds', '#spanBookmark');
 
   // remove fluff from episode list pages
-  let eplist = document.querySelector('div.barContent.episodeList > div:not(.arrow-general)');
+  const eplist = document.querySelector('div.barContent.episodeList > div:not(.arrow-general)');
   if (eplist) {
     let countdown = document.querySelector('#nextEpisodeCountDown');
     if (countdown) {
       countdown = countdown.parentElement.parentElement;
 
       // remove clear before listing
-      let clear = countdown.nextElementSibling;
+      const clear = countdown.nextElementSibling;
       if (clear && clear.matches('.clear')) {
         clear.remove();
       }
@@ -315,7 +311,11 @@ if (rVideoPage.test(url)) {
   console.log('Cleaning video page...');
 
   // override functions so they wont be do anything when called by the pages code
-  _.injectScript('(function () { DoDetect2 = CheckAdImage = function () {}; })();');
+  _.injectScript(`
+    isBlockAds2 = false;
+    DoDetect2 = function () {};
+    CheckAdImage = function () {};
+  `);
   console.log('Overridden anti-adblock detects.');
 
   // remove ad spaces
@@ -324,8 +324,8 @@ if (rVideoPage.test(url)) {
 
   // remove empty spaces from video pages
   // remove clears
-  let vid = document.getElementById('centerDivVideo'),
-      vidParent = vid.parentElement;
+  const vid = document.getElementById('centerDivVideo');
+  const vidParent = vid.parentElement;
   for (let i = 0; i < vidParent.children.length; i++) {
     if (vidParent.children[i].matches('.clear, .clear2')) {
       vidParent.removeChild(vidParent.children[i--]);
@@ -355,20 +355,20 @@ if (rVideoPage.test(url)) {
   }
 
   // hide on page video controls
-  let selectPlayer = document.getElementById('selectPlayer');
+  const selectPlayer = document.getElementById('selectPlayer');
   if (selectPlayer) {
     _.hideElement(selectPlayer.parentElement.parentElement.parentElement);
   }
 
   // remove info above video
-  let profileLink = document.querySelector('#adsIfrme a[href="/Profile"]');
+  const profileLink = document.querySelector('#adsIfrme a[href="/Profile"]');
   if (profileLink) {
     profileLink.parentElement.parentElement.remove();
   }
 
   // set player type
-  let useFlash = (settings.player === PLAYER.FLASH),
-      youtubeFlash = false;
+  let useFlash = (settings.player === PLAYER.FLASH);
+  let youtubeFlash = false;
 
   // set player cookie and reload with correct player
   if (useFlash && document.cookie.indexOf('usingFlashV1') < 0) {
@@ -396,13 +396,13 @@ if (rVideoPage.test(url)) {
 
       // functions to inject on page for flash video control
       // fires when youtube player is ready
-      let ytHook = (playerId) => {
+      const ytHook = (playerId) => {
         console.log('Youtube player hooked.');
         settings.autoPause && embedVideo.pauseVideo();
         embedVideo.addEventListener('onStateChange', _.checkAutoAdvance);
 
         // translate option into youtube quality strings values
-        let ytQuality = (quality) => {
+        const ytQuality = (quality) => {
           switch (quality) {
             case '360': return 'medium';
             case '480': return 'large';
@@ -428,14 +428,14 @@ if (rVideoPage.test(url)) {
       console.log('Using jwplayer.');
       // functions to inject on page for flash video control
       // fires when youtube player is ready
-      let jwHook = () => {
+      const jwHook = () => {
         // wait till video is loaded into player
         jwplayer().onReady(() => {
           console.log('jwplayer hooked.');
           // change the quality to desired flash option
-          let qualityLevels = jwplayer().getQualityLevels(),
-              qualitySet = false,
-              desiredQuality = parseInt(settings.quality, 10);
+          const qualityLevels = jwplayer().getQualityLevels();
+          const desiredQuality = parseInt(settings.quality, 10);
+          let qualitySet = false;
 
           // try to find exact quality level
           for (let i = 0; i < qualityLevels.length; i++) {
@@ -486,27 +486,27 @@ if (rVideoPage.test(url)) {
     console.log('Using HTML5 player.');
 
     // move quality select below player
-    let selectQuality = document.getElementById('selectQuality'),
-        videoArea = document.getElementById('centerDivVideo');
+    const selectQuality = document.getElementById('selectQuality');
+    const videoArea = document.getElementById('centerDivVideo');
     if (selectQuality && videoArea) {
-      let parent = selectQuality.parentElement;
+      const parent = selectQuality.parentElement;
       videoArea.parentElement.appendChild(document.createElement('div'), videoArea.nextSibling);
       videoArea.parentElement.appendChild(selectQuality, videoArea.nextSibling);
       parent.remove();
     }
 
     // functions to inject on page for html5 video control
-    let html5Hook = () => {
+    const html5Hook = () => {
       console.log('HTML5 player hooked.');
       // change the quality to desired flash option
-      let qualityLevels = document.querySelector('#selectQuality'),
-          qualitySet = false,
-          desiredQuality = parseInt(settings.quality, 10),
-          setQuality = (index) => {
-            qualityLevels.selectedIndex = index;
-            qualityLevels.dispatchEvent(new Event('change'));
-            _.removeAds('.clsTempMSg');
-          };
+      const qualityLevels = document.querySelector('#selectQuality');
+      const desiredQuality = parseInt(settings.quality, 10);
+      let qualitySet = false;
+      const setQuality = (index) => {
+        qualityLevels.selectedIndex = index;
+        qualityLevels.dispatchEvent(new Event('change'));
+        _.removeAds('.clsTempMSg');
+      };
       // try to find exact quality level
       for (let i = 0; i < qualityLevels.length; i++) {
         if (desiredQuality === parseInt(qualityLevels.options[i].innerHTML, 10)) {
@@ -536,7 +536,12 @@ if (rVideoPage.test(url)) {
         }
       }
 
-      settings.autoPause && my_video_1_html5_api.pause(); // auto pause
+      // auto pause
+      if (settings.autoPause) {
+        my_video_1_html5_api.pause();
+        my_video_1_html5_api.parentElement.setAttribute('autoplay', 'false');
+        my_video_1_html5_api.autoplay = false;
+      }
       my_video_1_html5_api.volume = settings.volume / 100; // volume
       my_video_1_html5_api.addEventListener('ended', _.checkAutoAdvance); // auto advance
     };
@@ -554,10 +559,10 @@ if (rVideoPage.test(url)) {
   settings.autoScroll && document.getElementById('container') && setTimeout(() => { document.getElementById('container').scrollIntoView(true); }, 0);
 
   // key listener
-  let keyListener = (evt) => {
+  const keyListener = (evt) => {
     if (!useFlash) {
-      let video = unsafeWindow.my_video_1_html5_api,
-          videoFocused = (unsafeWindow.document.activeElement === video);
+      const video = unsafeWindow.my_video_1_html5_api;
+      const videoFocused = (unsafeWindow.document.activeElement === video);
 
       // speed controls (html5)
       if (evt.code === 'Minus' || evt.code == 'Equal' && videoFocused) {
@@ -566,7 +571,7 @@ if (rVideoPage.test(url)) {
       }
 
       // large seek (html5)
-      let largeSeek = 20;
+      const largeSeek = 20; // TODO add settings option
       if (evt.ctrlKey && (evt.code === 'ArrowLeft' || evt.code === 'ArrowRight') && videoFocused) {
         video.currentTime += ((evt.code === 'ArrowLeft') ? -largeSeek : largeSeek);
         evt.preventDefault();
@@ -592,9 +597,9 @@ console.log('Starting general page cleaning...')
 
 // remove share stuff next to search bar
 // get the search element near the top of the page
-let result_box = document.getElementById('result_box');
+const result_box = document.getElementById('result_box');
 if (result_box) {
-  let ad = result_box.nextElementSibling;
+  const ad = result_box.nextElementSibling;
   if (ad && (ad.children.length === 0 || !ad.children[0].matches('a[href*="AdvanceSearch"]'))) {
     ad.remove();
   }
@@ -610,28 +615,27 @@ _.removeAds('#liMobile', '#liReportError', '#liRequest', '#liCommunity', '#liFAQ
 
 // keys listener for script mnu otions
 // home key
-let settingsMenu,
-    isSettingsMenuOpen = false;
+let settingsMenu;
+let isSettingsMenuOpen = false;
 let openSettingsMenu = () => {
   if (!isSettingsMenuOpen) {
     isSettingsMenuOpen = true;
 
     // create settings settingsMenu if it doesn't exist
     if (settingsMenu == null) {
-      let preview = document.implementation.createHTMLDocument('preview');
+      const preview = document.implementation.createHTMLDocument('preview');
       preview.documentElement.innerHTML = GM_getResourceText('settings');
       settingsMenu = preview.getElementById('kisscleaner-settings-container');
     }
 
     // set settingsMenu option values from current settings
-    let nodes = Array.from(settingsMenu.querySelectorAll('[name]'));
+    const nodes = Array.from(settingsMenu.querySelectorAll('[name]'));
     nodes.forEach((node) => {
       if (settings.hasOwnProperty(node.name)) {
-        let value = settings[node.name];
         if (node.type === 'checkbox') {
-          node.checked = value;
+          node.checked = settings[node.name];
         } else {
-          node.value = value;
+          node.value = settings[node.name];
         }
       }
     });
@@ -645,13 +649,13 @@ let openSettingsMenu = () => {
     saveSettingsMenu();
   }
 };
-let saveSettingsMenu = () => {
+const saveSettingsMenu = () => {
   // save values
-  let nodes = Array.from(settingsMenu.querySelectorAll('[name]')),
-      changes = false;
+  const nodes = Array.from(settingsMenu.querySelectorAll('[name]'));
+  let changes = false;
   nodes.forEach((node) => {
     if (settings.hasOwnProperty(node.name)) {
-      let value = ((node.type === 'checkbox') ? node.checked : node.value);
+      const value = ((node.type === 'checkbox') ? node.checked : node.value);
       if (settings[node.name] !== value) {
         changes = true;
       }
@@ -677,7 +681,7 @@ let saveSettingsMenu = () => {
   isSettingsMenuOpen = false;
 };
 // create global key listener
-let globalKeyListener = (evt) => {
+const globalKeyListener = (evt) => {
   if (evt.code == 'Home') {
     // prevent default action of scrolling to top of page
     evt.preventDefault();
@@ -693,8 +697,8 @@ window.addEventListener('keydown', globalKeyListener);
 GM_registerMenuCommand('KissCleaner Settings', unsafeWindow.openSettingsMenu);
 
 // search box navigation
-let searchResults = document.getElementById('searchResults'); // search results
-let searchBox = document.getElementById('keyword'); // search form text box
+const searchResults = document.getElementById('searchResults'); // search results
+const  searchBox = document.getElementById('keyword'); // search form text box
 // TODO arrow scroll through search results
 
 console.log('Finished general page cleaning.');
