@@ -9,7 +9,7 @@
 // @include     http://kisscartoon.me/*
 // @include     https://kissasian.com/*
 // @include     http://kissasian.com/*
-// @version     1.0.1
+// @version     1.0.2
 // @downloadURL https://juici.github.io/KissCleaner/kisscleaner.user.js
 // @grant       GM_getValue
 // @grant       GM_setValue
