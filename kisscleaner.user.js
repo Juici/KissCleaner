@@ -182,8 +182,8 @@ const _ = {
     }
   },
   // check if should advance to next video
-  checkAutoAdvance: function (state) {
-    state == 0 && settings.checkAutoAdvance && _.nextVideo();
+  checkAutoAdvance: function (evt) {
+    settings.autoAdvance && _.nextVideo();
   }
 };
 
