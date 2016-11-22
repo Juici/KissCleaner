@@ -9,7 +9,7 @@
 // @include     http://kisscartoon.me/*
 // @include     https://kissasian.com/*
 // @include     http://kissasian.com/*
-// @version     1.0
+// @version     1.0.1
 // @downloadURL https://juici.github.io/KissCleaner/kisscleaner.user.js
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -45,8 +45,8 @@ if (document.querySelector('.cf-browser-verification')) {
 
 // player type constants
 const PLAYER = {
-  FLASH: 'Flash',
-  HTML5: 'HTML5'
+  FLASH: 'flash',
+  HTML5: 'html5'
 };
 
 // site type
@@ -136,7 +136,7 @@ const _ = {
       rootAds.forEach(elt => elt.remove());
 
       // hide elements after #container in #containerRoot
-      const containerAds = _.queryAll('#container ~ *');
+      const containerAds = _.queryAll('#container ~ *:not(#kisscleaner-settings-container)');
       containerAds.forEach(elt => _.hideElement(elt, true));
 
       // hide elements in the #rightside that aren't content
