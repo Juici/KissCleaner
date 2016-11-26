@@ -1,25 +1,27 @@
 // ==UserScript==
-// @name        KissCleaner
-// @namespace   juici.github.io
-// @description Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
-// @author      Juici, crapier
-// @include     https://kissanime.to/*
-// @include     http://kissanime.to/*
-// @include     https://kisscartoon.me/*
-// @include     http://kisscartoon.me/*
-// @include     https://kissasian.com/*
-// @include     http://kissasian.com/*
-// @version     1.0.2
-// @downloadURL https://juici.github.io/KissCleaner/kisscleaner.user.js
-// @grant       GM_getValue
-// @grant       GM_setValue
-// @grant       GM_registerMenuCommand
-// @grant       GM_getResourceText
-// @grant       GM_addStyle
-// @grant       unsafeWindow
-// @resource    settings https://juici.github.io/KissCleaner/settings.html
-// @resource    css https://juici.github.io/KissCleaner/style.css
-// @resource    resizeVideo https://juici.github.io/KissCleaner/resize-video.css
+// @name            KissCleaner
+// @namespace       juici.github.io
+// @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
+// @author          Juici, crapier
+// @version         1.0.3
+// @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
+// @homepage        https://github.com/Juici/KissCleaner
+// @contactURL      https://github.com/Juici/KissCleaner/issues
+// @supportURL      https://github.com/Juici/KissCleaner/issues
+// @contributionURL https://github.com/Juici/KissCleaner#donate
+// @downloadURL     https://juici.github.io/KissCleaner/kisscleaner.user.js
+// @upadeURL        https://juici.github.io/KissCleaner/kisscleaner.meta.js
+// @include         /^https?:\/\/kiss(?:anime\.to|cartoon\.me|asian\.com).*/
+// @grant           unsafeWindow
+// @grant           GM_addStyle
+// @grant           GM_getValue
+// @grant           GM_setValue
+// @grant           GM_registerMenuCommand
+// @grant           GM_getResourceText
+// @resource        settings https://juici.github.io/KissCleaner/settings.html
+// @resource        css https://juici.github.io/KissCleaner/style.css
+// @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css
+// @run-at          document-body
 // @noframes
 // ==/UserScript==
 
@@ -36,7 +38,7 @@ if (document.querySelector('.cf-browser-verification')) {
   // cloudflare browser verification
   console.log('Waiting for CloudFlare browser verification.');
   return;
-} else if (document.getElementById('containerRoot') == null) {
+} else if (!document.getElementById('containerRoot')) {
   // some error with page
   console.log('Something went wrong loading page. Reloading to fix it...');
   window.location.href = window.location.href;
