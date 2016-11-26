@@ -3,14 +3,14 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.0.3
+// @version         1.0.3.1
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @homepage        https://github.com/Juici/KissCleaner
 // @contactURL      https://github.com/Juici/KissCleaner/issues
 // @supportURL      https://github.com/Juici/KissCleaner/issues
 // @contributionURL https://github.com/Juici/KissCleaner#donate
 // @downloadURL     https://juici.github.io/KissCleaner/kisscleaner.user.js
-// @upadeURL        https://juici.github.io/KissCleaner/kisscleaner.meta.js
+// @updateURL       https://juici.github.io/KissCleaner/kisscleaner.meta.js
 // @include         /^https?:\/\/kiss(?:anime\.to|cartoon\.me|asian\.com).*/
 // @grant           unsafeWindow
 // @grant           GM_addStyle
