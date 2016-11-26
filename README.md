@@ -14,7 +14,7 @@ This is a rewrite of my fork of [KissAnime Cleaner](https://gist.github.com/crap
 * Removes ads and annoyances
 * Stop anti-adblock
 * Clean up pages
-* [Configurable settings](#Settings) (**Home** key or **UserScript Commands Menu**)
+* [Configurable settings](#settings) (**Home** key or **UserScript Commands Menu**)
   * Settings html is well structured and id/class labelled (for those UserStyle enthusiasts)
 * Navigate between episodes using **Numpad \*** *(previous)* and **Numpad -** *(next)*
 * Hold **Ctrl** to skip 20s back/forward in video using **left/right arrow keys**
