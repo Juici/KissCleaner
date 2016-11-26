@@ -44,10 +44,13 @@ This is a rewrite of my fork of [KissAnime Cleaner](https://gist.github.com/crap
 > ##### Note: After installation (which may require restarting your browser), you are now ready to install userscripts.
 
 #### Step 2: Userscript
-* [Install](https://juici.github.io/KissCleaner/kisscleaner.user.js) KissCleaner
+* [Install](https://juici.github.io/KissCleaner/kisscleaner.user.js) *from juici.github.io*
+* [Install](https://raw.githubusercontent.com/Juici/KissCleaner/master/kisscleaner.user.js) *from github.com*
+* [Install](https://openuserjs.org/install/Juici/KissCleaner.user.js) *from openuserjs.org*
+* [Install](https://greasyfork.org/scripts/25156/code/kisscleaner.user.js) *from greasyfork.org*
 
 #### Step 3: Share
-* Star on github
+* Star on Github
 * Share on social networks
 
 
