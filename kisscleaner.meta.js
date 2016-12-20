@@ -1,5 +1,5 @@
 // ==UserScript==
 // @name            KissCleaner
 // @namespace       juici.github.io
-// @version         1.0.3.1
+// @version         1.1
 // ==/UserScript==
