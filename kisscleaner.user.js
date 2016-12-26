@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.1
+// @version         1.1.1
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @homepage        https://github.com/Juici/KissCleaner
 // @contactURL      https://github.com/Juici/KissCleaner/issues
@@ -575,7 +575,7 @@
         const videoFocused = (unsafeWindow.document.activeElement === video);
 
         // speed controls (html5)
-        if (evt.code === 'Minus' || evt.code == 'Equal' && videoFocused) {
+        if ((evt.code === 'Minus' || evt.code == 'Equal') && videoFocused) {
           video.playbackRate += ((evt.code === 'Minus' && video.playbackRate > 0.25)? -0.25 : (evt.code == 'Equal' && video.playbackRate < 5) ? 0.25 : 0);
           evt.preventDefault();
         }
