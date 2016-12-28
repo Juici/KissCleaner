@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.1.1
+// @version         1.1.2
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @homepage        https://github.com/Juici/KissCleaner
 // @contactURL      https://github.com/Juici/KissCleaner/issues
@@ -568,34 +568,38 @@
     // scroll to the container
     settings.autoScroll && document.getElementById('container') && setTimeout(() => { document.getElementById('container').scrollIntoView(true); }, 0);
 
-    // key listener
-    const keyListener = (evt) => {
-      if (!useFlash) {
-        const video = unsafeWindow.my_video_1_html5_api;
-        const videoFocused = (unsafeWindow.document.activeElement === video);
-
-        // speed controls (html5)
-        if ((evt.code === 'Minus' || evt.code == 'Equal') && videoFocused) {
-          video.playbackRate += ((evt.code === 'Minus' && video.playbackRate > 0.25)? -0.25 : (evt.code == 'Equal' && video.playbackRate < 5) ? 0.25 : 0);
-          evt.preventDefault();
-        }
-
-        // large seek (html5)
-        const largeSeek = 20; // TODO add settings option
-        if (evt.ctrlKey && (evt.code === 'ArrowLeft' || evt.code === 'ArrowRight') && videoFocused) {
-          video.currentTime += ((evt.code === 'ArrowLeft') ? -largeSeek : largeSeek);
-          evt.preventDefault();
-        }
-      }
-
+    // add listeners for keydown
+    const windowListener = function (evt) {
       // prev / next video navigate
       if (evt.code === 'NumpadMultiply' || evt.code === 'NumpadSubtract') {
         (evt.code === 'NumpadMultiply') ? _.previousVideo() : _.nextVideo();
         evt.preventDefault();
       }
     };
-    // add the listener for keydown
-    window.addEventListener('keydown', keyListener);
+    const videoListener = function (evt) {
+      if (!useFlash) {
+        const video = unsafeWindow.my_video_1_html5_api;
+        const videoFocused = (unsafeWindow.document.activeElement === video);
+
+        // speed controls (html5)
+        if (evt.code === 'Minus' || evt.code == 'Equal') {
+          video.playbackRate += ((evt.code === 'Minus' && video.playbackRate > 0.25)? -0.25 : (evt.code == 'Equal' && video.playbackRate < 5) ? 0.25 : 0);
+          evt.preventDefault();
+        }
+
+        // large seek (html5)
+        const largeSeek = 20; // TODO add settings option
+        if (evt.ctrlKey && (evt.code === 'ArrowLeft' || evt.code === 'ArrowRight')) {
+          video.currentTime += ((evt.code === 'ArrowLeft') ? -largeSeek : largeSeek);
+          evt.preventDefault();
+        }
+      }
+    };
+    const my_video_1 = document.getElementById('my_video_1');
+    if (my_video_1) {
+      window.addEventListener('keydown', videoListener);
+    }
+    window.addEventListener('keydown', windowListener);
 
     console.log('Finished cleaning video page.');
   }
