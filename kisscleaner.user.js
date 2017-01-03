@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.1.3
+// @version         1.2
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @homepage        https://github.com/Juici/KissCleaner
 // @contactURL      https://github.com/Juici/KissCleaner/issues
@@ -321,12 +321,26 @@
       isBlockAds2 = false;
       DoDetect2 = function () {};
       CheckAdImage = function () {};
+      xaZlE = function () {};
     `);
+    // doesn't appear to be randomly generated function name (leaving this here for now)
+    // get around new anti-adblock on kisscartoon.se
+    //const aab = document.querySelector('#container ~ iframe[src="/ucs.aspx"] ~ script');
+    //if (aab) {
+    //  const aabFn = aab.textContent.replace(/.*function (.*?)\(\).*/, '$1').trim();
+    //  _.injectScript(`
+    //    ${aabFn} = function () {};
+    //  `);
+    //}
     console.log('Overridden anti-adblock detects.');
 
     // remove ad spaces
     // remove lights off feature (pointless with ads removed)
-    _.removeAds('#divFloatLeft', '#divFloatRight', '#adsIfrme6', '#adsIfrme7', '#adsIfrme8', '#adsIfrme10', '#adsIfrme11', '#adCheck1', '#adCheck2', '#adCheck3', '#divDownload', '#divFileName', '#switch', '#divTextQua');
+    _.removeAds('#divFloatLeft', '#divFloatRight', '#adsIfrme6', '#adsIfrme7', '#adsIfrme8', '#adsIfrme10', '#adsIfrme11', '#adCheck1', '#adCheck2', '#adCheck3', '#divDownload', '#divFileName', '#switch', '#divTextQua', '#videoAd');
+    _.queryAll(`iframe[src*="${window.location.hostname}/Ads"]:not(#videoAd)`).forEach(e => e.parentElement.remove());
+
+    // hide ads
+    _.hideAds();
 
     // remove empty spaces from video pages
     // remove clears
