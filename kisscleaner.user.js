@@ -11,7 +11,7 @@
 // @contributionURL https://github.com/Juici/KissCleaner#donate
 // @downloadURL     https://juici.github.io/KissCleaner/kisscleaner.user.js
 // @updateURL       https://juici.github.io/KissCleaner/kisscleaner.meta.js
-// @include         /^https?:\/\/kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se))|asian\.com).*/
+// @include         /^https?:\/\/kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com).*/
 // @grant           unsafeWindow
 // @grant           GM_addStyle
 // @grant           GM_getValue
