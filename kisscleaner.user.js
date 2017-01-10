@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.2
+// @version         1.3
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @homepage        https://github.com/Juici/KissCleaner
 // @contactURL      https://github.com/Juici/KissCleaner/issues
@@ -18,15 +18,15 @@
 // @grant           GM_setValue
 // @grant           GM_registerMenuCommand
 // @grant           GM_getResourceText
-// @resource        settings https://juici.github.io/KissCleaner/settings.html
-// @resource        css https://juici.github.io/KissCleaner/style.css
-// @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css
-// @run-at          document-body
+// @resource        settings https://juici.github.io/KissCleaner/settings.html?v=1
+// @resource        css https://juici.github.io/KissCleaner/style.css?v=1
+// @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css?v=1
+// @run-at          document-start
 // @noframes
 // ==/UserScript==
 /* global exportFunction */
 
-(function () {
+const clean = function () {
   // current page url
   const url = window.location.href;
   // regex to check against for determining what type page currently on and what to clean
@@ -559,7 +559,7 @@
           }
         }
 
-        const video = window.my_video_1_html5_api;
+        const video = document.getElementById('my_video_1_html5_api');
         // auto pause
         if (settings.autoPause) {
           video.pause();
@@ -592,7 +592,7 @@
     };
     const videoListener = function (evt) {
       if (!useFlash) {
-        const video = unsafeWindow.my_video_1_html5_api;
+        const video = unsafeWindow.getElementById('my_video_1_html5_api');
         const videoFocused = (unsafeWindow.document.activeElement === video);
 
         // speed controls (html5)
@@ -731,4 +731,6 @@
 
   console.log('Finished general page cleaning.');
   console.log('Finished initialization.');
-})();
+};
+// work around different greasemonkey and tampermonkey load times
+window.addEventListener('DOMContentLoaded', clean);
