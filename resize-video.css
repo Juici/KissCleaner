@@ -45,6 +45,10 @@
   width: var(--video-width) !important;
   outline: 0 !important;
 }
+#my_video_1:-webkit-full-screen {
+  height: 100% !important;
+  width: 100% !important;
+}
 
 .barContent > div > div:nth-of-type(1) {
   display: flex !important;
