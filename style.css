@@ -1,6 +1,8 @@
 /* ::::: general ::::: */
 
-
+div.divCloseBut {
+  display: none;
+}
 
 /* ::::: settings ::::: */
 
