@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.3.2
+// @version         1.4
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @icon            https://juici.github.io/KissCleaner/icon.png
 // @homepage        https://github.com/Juici/KissCleaner
@@ -27,15 +27,162 @@
 // ==/UserScript==
 /* global exportFunction */
 
-const clean = function () {
-  // current page url
-  const url = window.location.href;
-  // regex to check against for determining what type page currently on and what to clean
-  const rHome = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/$/;
-  const rAnimeList = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
-  const rAnimePage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*$/;
-  const rVideoPage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*\/[^\/]*(?:\?id=\d*)?/;
+// current page url
+const url = window.location.href;
+// regex to check against for determining what type page currently on and what to clean
+const rHome = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/$/;
+const rAnimeList = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
+const rAnimePage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*$/;
+const rVideoPage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*\/[^\/]*(?:\?id=\d*)?/;
 
+// player type constants
+const PLAYER = {
+  FLASH: 'flash',
+  HTML5: 'html5'
+};
+
+// site type
+const SITE = {
+  ANIME: false,
+  CARTOON: false,
+  ASIAN: false
+};
+const kissSite = /:\/\/kiss([^.]+)\./.exec(window.location.href)[1].toUpperCase();
+SITE[kissSite] = true;
+
+// settings
+const settings = {
+  // auto pause on video load
+  autoPause: GM_getValue('autoPause', false),
+  // auto advance to next video on playback end
+  autoAdvance: GM_getValue('autoAdvance', true),
+  // auto scroll to video area
+  autoScroll: GM_getValue('autoScroll', true),
+
+  // resize the video
+  resizeVideo: GM_getValue('resizeVideo', true),
+
+  // remove login
+  removeLogin: GM_getValue('removeLogin', true),
+  // remove comments area
+  removeComments: GM_getValue('removeComments', true),
+
+  // video player
+  player: GM_getValue('player', PLAYER.HTML5),
+  // video quality
+  quality: GM_getValue('quality', '1080'),
+  // video volume
+  volume: GM_getValue('volume', 100)
+};
+
+const _ = {
+  // document query returning array
+  queryAll: function (...selector) {
+    return Array.from(document.querySelectorAll(selector instanceof Array ? selector.join(',') : selector));
+  },
+  // remove element matching css selector (first or index)
+  removeAd: function (selector, index) {
+    const ads = _.queryAll(selector);
+
+    // make sure index is within bounds
+    index = index || 0;
+    if (index < 0 || index > ads.length - 1) {
+      index = 0;
+    }
+
+    ads[index].remove();
+  },
+  // remove all elements matching css selectors
+  removeAds: function (...selectors) {
+    const ads = _.queryAll(selectors);
+    ads.forEach(elt => elt.remove());
+  },
+  // clean up the empty space left by ad removal
+  cleanupAdspace: function () {
+    // get the ads frame
+    const adspace = document.getElementById('adsIfrme1');
+    if (adspace) {
+      // check and remove the clear before the adspace
+      const clearBefore = adspace.parentElement.previousElementSibling;
+      if (clearBefore && clearBefore.matches('.clear')) {
+        clearBefore.remove();
+      }
+      // check and remove the clear a bit after the adspace
+      const clearAfter = adspace.parentElement.nextElementSibling && adspace.parentElement.nextElementSibling.nextElementSibling &&
+        adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling ? adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling : null;
+      if (clearAfter && clearAfter.matches('.clear')) {
+        clearAfter.remove();
+      }
+      // remove the adspace's parent (and thus it)
+      adspace.parentElement.remove();
+    }
+  },
+  // remove or hide stubborn ads
+  hideAds: function () {
+    let count = 0;
+    const adremover = setInterval(() => {
+      count++;
+
+      // remove extra elements after #containerRoot in body
+      const rootAds = _.queryAll('#containerRoot ~ *');
+      rootAds.forEach(elt => elt.remove());
+
+      // hide elements after #container in #containerRoot
+      const containerAds = _.queryAll('#container ~ *:not(#kisscleaner-settings-container)');
+      containerAds.forEach(elt => _.hideElement(elt, true));
+
+      // hide elements in the #rightside that aren't content
+      const rightsideAds = _.queryAll('#rightside > div:not(.rightBox):not(.clear):not(.clear2)');
+      rightsideAds.forEach(elt => _.hideElement(elt, true));
+
+      if (count === 50) {
+        clearInterval(adremover);
+      }
+    }, 100);
+  },
+  // inject javascript into page
+  injectScript: function (js) {
+    // create script to inject
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.innerHTML = (typeof js === 'function' ? `(${js.toString()})();` : js);
+    // inject the script
+    document.head.appendChild(script);
+  },
+  // hide an element, soft param doesn't use 'display: none;' instead 'visibility: hidden; height: 0; width: 0;'
+  hideElement: function (element, soft) {
+    if (soft === true) {
+      element.style.setProperty('visibility', 'hidden', 'important');
+      element.style.setProperty('height', '0', 'important');
+      element.style.setProperty('width', '0', 'important');
+    } else {
+      element.style.setProperty('display', 'none', 'important');
+    }
+  },
+  // navigate to previous video
+  previousVideo: function () {
+    const btnPrevious = document.getElementById('btnPrevious');
+    if (btnPrevious) {
+      window.location.href = btnPrevious.parentElement.href;
+    }
+  },
+  // navigate to next video
+  nextVideo: function () {
+    const btnNext = document.getElementById('btnNext');
+    if (btnNext) {
+      window.location.href = btnNext.parentElement.href;
+    }
+  },
+  // check if should advance to next video
+  checkAutoAdvance: function (evt) {
+    settings.autoAdvance && _.nextVideo();
+  }
+};
+
+// add custom css
+GM_addStyle(GM_getResourceText('css'));
+
+const clean = function () {
   // pre init checks
   if (document.querySelector('.cf-browser-verification')) {
     // cloudflare browser verification
@@ -50,154 +197,7 @@ const clean = function () {
     return;
   }
 
-  // player type constants
-  const PLAYER = {
-    FLASH: 'flash',
-    HTML5: 'html5'
-  };
-
-  // site type
-  const SITE = {
-    ANIME: false,
-    CARTOON: false,
-    ASIAN: false
-  };
-  const kissSite = /:\/\/kiss([^.]+)\./.exec(window.location.href)[1].toUpperCase();
-  SITE[kissSite] = true;
-
-  // settings
-  const settings = {
-    // auto pause on video load
-    autoPause: GM_getValue('autoPause', false),
-    // auto advance to next video on playback end
-    autoAdvance: GM_getValue('autoAdvance', true),
-    // auto scroll to video area
-    autoScroll: GM_getValue('autoScroll', true),
-
-    // resize the video
-    resizeVideo: GM_getValue('resizeVideo', true),
-
-    // remove login
-    removeLogin: GM_getValue('removeLogin', true),
-    // remove comments area
-    removeComments: GM_getValue('removeComments', true),
-
-    // video player
-    player: GM_getValue('player', PLAYER.HTML5),
-    // video quality
-    quality: GM_getValue('quality', '1080'),
-    // video volume
-    volume: GM_getValue('volume', 100)
-  };
-
-  const _ = {
-    // document query returning array
-    queryAll: function (...selector) {
-      return Array.from(document.querySelectorAll(selector instanceof Array ? selector.join(',') : selector));
-    },
-    // remove element matching css selector (first or index)
-    removeAd: function (selector, index) {
-      const ads = _.queryAll(selector);
-
-      // make sure index is within bounds
-      index = index || 0;
-      if (index < 0 || index > ads.length - 1) {
-        index = 0;
-      }
-
-      ads[index].remove();
-    },
-    // remove all elements matching css selectors
-    removeAds: function (...selectors) {
-      const ads = _.queryAll(selectors);
-      ads.forEach(elt => elt.remove());
-    },
-    // clean up the empty space left by ad removal
-    cleanupAdspace: function () {
-      // get the ads frame
-      const adspace = document.getElementById('adsIfrme1');
-      if (adspace) {
-        // check and remove the clear before the adspace
-        const clearBefore = adspace.parentElement.previousElementSibling;
-        if (clearBefore && clearBefore.matches('.clear')) {
-          clearBefore.remove();
-        }
-        // check and remove the clear a bit after the adspace
-        const clearAfter = adspace.parentElement.nextElementSibling && adspace.parentElement.nextElementSibling.nextElementSibling &&
-          adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling ? adspace.parentElement.nextElementSibling.nextElementSibling.nextElementSibling : null;
-        if (clearAfter && clearAfter.matches('.clear')) {
-          clearAfter.remove();
-        }
-        // remove the adspace's parent (and thus it)
-        adspace.parentElement.remove();
-      }
-    },
-    // remove or hide stubborn ads
-    hideAds: function () {
-      let count = 0;
-      const adremover = setInterval(() => {
-        count++;
-
-        // remove extra elements after #containerRoot in body
-        const rootAds = _.queryAll('#containerRoot ~ *');
-        rootAds.forEach(elt => elt.remove());
-
-        // hide elements after #container in #containerRoot
-        const containerAds = _.queryAll('#container ~ *:not(#kisscleaner-settings-container)');
-        containerAds.forEach(elt => _.hideElement(elt, true));
-
-        // hide elements in the #rightside that aren't content
-        const rightsideAds = _.queryAll('#rightside > div:not(.rightBox):not(.clear):not(.clear2)');
-        rightsideAds.forEach(elt => _.hideElement(elt, true));
-
-        if (count === 50) {
-          clearInterval(adremover);
-        }
-      }, 100);
-    },
-    // inject javascript into page
-    injectScript: function (js) {
-      // create script to inject
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.innerHTML = (typeof js === 'function' ? `(${js.toString()})();` : js);
-      // inject the script
-      document.head.appendChild(script);
-    },
-    // hide an element, soft param doesn't use 'display: none;' instead 'visibility: hidden; height: 0; width: 0;'
-    hideElement: function (element, soft) {
-      if (soft === true) {
-        element.style.setProperty('visibility', 'hidden', 'important');
-        element.style.setProperty('height', '0', 'important');
-        element.style.setProperty('width', '0', 'important');
-      } else {
-        element.style.setProperty('display', 'none', 'important');
-      }
-    },
-    // navigate to previous video
-    previousVideo: function () {
-      const btnPrevious = document.getElementById('btnPrevious');
-      if (btnPrevious) {
-        window.location.href = btnPrevious.parentElement.href;
-      }
-    },
-    // navigate to next video
-    nextVideo: function () {
-      const btnNext = document.getElementById('btnNext');
-      if (btnNext) {
-        window.location.href = btnNext.parentElement.href;
-      }
-    },
-    // check if should advance to next video
-    checkAutoAdvance: function (evt) {
-      settings.autoAdvance && _.nextVideo();
-    }
-  };
-
   console.log('Initializing KissCleaner...');
-
-  // add custom css
-  GM_addStyle(GM_getResourceText('css'));
 
   //---------------------------------------------------------------------------------------------------------------
   // Clean Home page
