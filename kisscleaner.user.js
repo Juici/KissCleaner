@@ -20,7 +20,7 @@
 // @grant           GM_registerMenuCommand
 // @grant           GM_getResourceText
 // @resource        settings https://juici.github.io/KissCleaner/settings.html?v=1
-// @resource        css https://juici.github.io/KissCleaner/style.css?v=1
+// @resource        css https://juici.github.io/KissCleaner/style.css?v=2
 // @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css?v=1
 // @run-at          document-start
 // @noframes
