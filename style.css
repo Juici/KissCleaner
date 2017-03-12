@@ -1,7 +1,7 @@
 /* ::::: general ::::: */
 
 div.divCloseBut, .videoAd, .videoAdClose {
-  display: none;
+  display: none !important;
 }
 
 /* ::::: settings ::::: */
