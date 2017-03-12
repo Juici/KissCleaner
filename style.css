@@ -1,6 +1,6 @@
 /* ::::: general ::::: */
 
-div.divCloseBut {
+div.divCloseBut, .videoAd, .videoAdClose {
   display: none;
 }
 
