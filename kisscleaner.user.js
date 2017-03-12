@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.4
+// @version         1.4.1
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @icon            https://juici.github.io/KissCleaner/icon.png
 // @homepage        https://github.com/Juici/KissCleaner
@@ -20,7 +20,7 @@
 // @grant           GM_registerMenuCommand
 // @grant           GM_getResourceText
 // @resource        settings https://juici.github.io/KissCleaner/settings.html?v=1
-// @resource        css https://juici.github.io/KissCleaner/style.css?v=2
+// @resource        css https://juici.github.io/KissCleaner/style.css?v=3
 // @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css?v=1
 // @run-at          document-start
 // @noframes
