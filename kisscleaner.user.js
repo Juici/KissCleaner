@@ -20,7 +20,7 @@
 // @grant           GM_registerMenuCommand
 // @grant           GM_getResourceText
 // @resource        settings https://juici.github.io/KissCleaner/settings.html?v=1
-// @resource        css https://juici.github.io/KissCleaner/style.css?v=3
+// @resource        css https://juici.github.io/KissCleaner/style.css?v=4
 // @resource        resizeVideo https://juici.github.io/KissCleaner/resize-video.css?v=1
 // @run-at          document-start
 // @noframes
@@ -215,7 +215,7 @@ const clean = function () {
         if (child.children.length > 0) {
           // check search patterns
           let remove = false;
-          for (let pattern of rightsideSearch) {
+          for (const pattern of rightsideSearch) {
             if (child.children[0].textContent.search(pattern) > 0) {
               remove = true;
               break;
@@ -297,7 +297,7 @@ const clean = function () {
 
       // loop remove element if not listing or element containing counting
       let child;
-      while (eplist.children.length > 0 && !((child = eplist.children[0]).matches('.listing') || (countdown != null && child == countdown))) {
+      while (eplist.children.length > 0 && !((child = eplist.children[0]).matches('.listing') || (typeof countdown !== 'undefined' && countdown !== null && child === countdown))) {
         child.remove();
       }
     }
@@ -402,9 +402,10 @@ const clean = function () {
       window.location.href = window.location.href;
     }
 
-    if ((useFlash && unsafeWindow.jwplayer == null) || (!useFlash && unsafeWindow.myPlayer == null)) {
+    const _jw = (typeof unsafeWindow.jwplayer === 'undefined' || unsafeWindow.jwplayer === null), _mp = (typeof unsafeWindow.myPlayer === 'undefined' || unsafeWindow.myPlayer === null);
+    if ((useFlash && _jw) || (!useFlash && _mp)) {
       useFlash = !useFlash;
-      youtubeFlash = (unsafeWindow.jwplayer == null && unsafeWindow.myPlayer == null);
+      youtubeFlash = _jw && _mp;
     }
 
     // start per player settings
@@ -597,8 +598,8 @@ const clean = function () {
         const videoFocused = (unsafeWindow.document.activeElement === video);
 
         // speed controls (html5)
-        if (evt.code === 'Minus' || evt.code == 'Equal') {
-          video.playbackRate += ((evt.code === 'Minus' && video.playbackRate > 0.25)? -0.25 : (evt.code == 'Equal' && video.playbackRate < 5) ? 0.25 : 0);
+        if (evt.code === 'Minus' || evt.code === 'Equal') {
+          video.playbackRate += ((evt.code === 'Minus' && video.playbackRate > 0.25)? -0.25 : (evt.code === 'Equal' && video.playbackRate < 5) ? 0.25 : 0);
           evt.preventDefault();
         }
 
@@ -646,12 +647,12 @@ const clean = function () {
   // home key
   let settingsMenu;
   let isSettingsMenuOpen = false;
-  let openSettingsMenu = () => {
+  const openSettingsMenu = () => {
     if (!isSettingsMenuOpen) {
       isSettingsMenuOpen = true;
 
       // create settings settingsMenu if it doesn't exist
-      if (settingsMenu == null) {
+      if (typeof settingsMenu === 'undefined' || settingsMenu === null) {
         const preview = document.implementation.createHTMLDocument('preview');
         preview.documentElement.innerHTML = GM_getResourceText('settings');
         settingsMenu = preview.getElementById('kisscleaner-settings-container');
@@ -711,7 +712,7 @@ const clean = function () {
   };
   // create global key listener
   const globalKeyListener = (evt) => {
-    if (evt.code == 'Home') {
+    if (evt.code === 'Home') {
       // prevent default action of scrolling to top of page
       evt.preventDefault();
       openSettingsMenu();
