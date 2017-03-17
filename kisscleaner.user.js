@@ -30,10 +30,10 @@
 // current page url
 const url = window.location.href;
 // regex to check against for determining what type page currently on and what to clean
-const rHome = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/$/;
-const rAnimeList = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
-const rAnimePage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*$/;
-const rVideoPage = /https?:\/\/(kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*\/[^\/]*(?:\?id=\d*)?/;
+const rHome = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/$/;
+const rAnimeList = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
+const rAnimePage = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*$/;
+const rVideoPage = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*\/[^\/]*(?:\?id=\d*)?/;
 
 // player type constants
 const PLAYER = {
