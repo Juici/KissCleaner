@@ -1,0 +1,33 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "browser"
+  },
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "greasemonkey": true,
+    "jquery": true
+  },
+  "globals": {
+  },
+  "rules": {
+    "no-global-assign": "off",
+    "no-cond-assign": "off",
+    "no-console": "off",
+
+    "eqeqeq": ["error", "always"],
+    "yoda": 1,
+
+    "no-unused-vars": "off",
+    "no-trailing-spaces": "error",
+    "quotes": ["error", "single"],
+
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-numeric-literals": "error",
+    "prefer-template": "error"
+  },
+  "root": true
+}
