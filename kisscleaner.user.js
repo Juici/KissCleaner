@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.4.1
+// @version         1.5
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @icon            https://juici.github.io/KissCleaner/icon.png
 // @homepage        https://github.com/Juici/KissCleaner
@@ -25,7 +25,6 @@
 // @run-at          document-start
 // @noframes
 // ==/UserScript==
-/* global exportFunction */
 
 // current page url
 const url = window.location.href;
@@ -511,7 +510,7 @@ const clean = function () {
       console.log('Using HTML5 player.');
 
       // move quality select below player
-      const selectQuality = document.getElementById('selectQuality');
+      const selectQuality = document.getElementById('selectQuality') || document.getElementById('slcQualix');
       const videoArea = document.getElementById('centerDivVideo');
       if (selectQuality && videoArea) {
         const parent = selectQuality.parentElement;
@@ -524,7 +523,7 @@ const clean = function () {
       const html5Hook = () => {
         console.log('HTML5 player hooked.');
         // change the quality to desired flash option
-        const qualityLevels = document.querySelector('#selectQuality');
+        const qualityLevels = document.getElementById('selectQuality') || document.getElementById('slcQualix');
         const desiredQuality = parseInt(settings.quality, 10);
         let qualitySet = false;
         const setQuality = (index) => {
