@@ -4,6 +4,8 @@ Watch anime the right way.
 
 This is a rewrite of my fork of [KissAnime Cleaner](https://gist.github.com/crapier/91926a6353207f4524cc) by crapier. It features a new settings menu design and various updates and clean ups of the code.
 
+Feel free to submit a pull request if you have a fix or feature you want adding and I'll review it.
+
 
 ## Features
 
