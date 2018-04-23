@@ -3,7 +3,7 @@
 // @namespace       juici.github.io
 // @description     Cleans up KissAnime pages. Tested to work with Firefox and Greasemonkey.
 // @author          Juici, crapier
-// @version         1.5
+// @version         1.5.2
 // @license         https://github.com/Juici/KissCleaner/blob/master/LICENSE
 // @icon            https://juici.github.io/KissCleaner/icon.png
 // @homepage        https://github.com/Juici/KissCleaner
@@ -12,7 +12,7 @@
 // @contributionURL https://github.com/Juici/KissCleaner#donate
 // @downloadURL     https://juici.github.io/KissCleaner/kisscleaner.user.js
 // @updateURL       https://juici.github.io/KissCleaner/kisscleaner.meta.js
-// @include         /^https?:\/\/kiss(?:anime\.(?:to|ru)|cartoon\.(?:me|se)|asian\.com).*/
+// @include         /^https?:\/\/kiss(?:anime\.(?:to|ru|ac)|cartoon\.(?:me|se|ac)|asian\.(?:com|se))(?:\/.*|)/
 // @grant           unsafeWindow
 // @grant           GM_addStyle
 // @grant           GM_getValue
@@ -29,10 +29,10 @@
 // current page url
 const url = window.location.href;
 // regex to check against for determining what type page currently on and what to clean
-const rHome = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/$/;
-const rAnimeList = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
-const rAnimePage = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*$/;
-const rVideoPage = /https?:\/\/(kiss(?:anime\.ru|cartoon\.se|asian\.com))\/(Anime|Cartoon|Drama)\/[^\/]*\/[^\/]*(?:\?id=\d*)?/;
+const rHome = /https?:\/\/(kiss(?:anime\.(?:to|ru|ac)|cartoon\.(?:me|se|ac)|asian\.(?:com|se)))\/$/;
+const rAnimeList = /https?:\/\/(kiss(?:anime\.(?:to|ru|ac)|cartoon\.(?:me|se|ac)|asian\.(?:com|se)))\/(AnimeList|Genre|Status|Search|UpcomingAnime|CartoonList|DramaList|Country)/;
+const rAnimePage = /https?:\/\/(kiss(?:anime\.(?:to|ru|ac)|cartoon\.(?:me|se|ac)|asian\.(?:com|se)))\/(Anime|Cartoon|Drama)\/[^/]*$/;
+const rVideoPage = /https?:\/\/(kiss(?:anime\.(?:to|ru|ac)|cartoon\.(?:me|se|ac)|asian\.(?:com|se)))\/(Anime|Cartoon|Drama)\/[^/]*\/[^/]*(?:\?id=\d*)?/;
 
 // player type constants
 const PLAYER = {
